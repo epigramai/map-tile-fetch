@@ -2,10 +2,7 @@
   "name": "map-tile-fetch",
   "version": "0.1.0",
   "description": "Map tiles for d3 visualization",
-  "private": true,
-  "sideEffects": [
-      "**/*.css"
-  ],
+  "private": false,
   "main": "dist/index.mjs",
   "files": ["dist"],
   "scripts": {
