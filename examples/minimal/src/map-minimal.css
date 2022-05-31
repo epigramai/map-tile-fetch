@@ -1,0 +1,6 @@
+html { scrollbar-width: none;}
+body { overflow: auto; margin: 0; padding: 0; }
+#map canvas {
+    position: absolute;
+    pointer-events: none;
+}
