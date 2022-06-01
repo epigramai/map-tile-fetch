@@ -1,5 +1,5 @@
 import './map-minimal.css';
-import { TileMap } from '../../../dist/index.mjs';
+import { TileMap } from 'map-tile-fetch';
 
 console.log("MAP", TileMap)
 // Example usage code

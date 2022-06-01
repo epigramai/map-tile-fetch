@@ -16,11 +16,6 @@ export class TileFetcher {
         this.idx = 0;
         this.tilesRemaining = 0;
         if (getUrl) this.getUrl = getUrl
-        // let canvas = document.createElement('canvas');
-        // canvas.width = this.tileSize;
-        // canvas.height = this.tileSize;
-
-        // this.scrapCtx = canvas.getContext('2d');
     }
     scaledTiles(tfm){
         return this.tileSet
@@ -144,9 +139,9 @@ export class TileFetcher {
                 zOffset = nz - z;
                 loRes = this.zoomedOutCoordinates(x, y, z, zOffset);
                 img = this.getCachedImage(...loRes.tile);
-                offsetX = loRes.offset[0];
-                offsetY = loRes.offset[1];
                 if(img){
+                    offsetX = loRes.offset[0];
+                    offsetY = loRes.offset[1];
                     this.ctx.drawImage(
                         img,
                         offsetX * this.tileSize,
@@ -219,7 +214,7 @@ export class TileFetcher {
                 tileCoords.add([x, y, z])
             }
         }
-        const zOffsetLarge = - Math.max(0, z - 3)
+        const zOffsetLarge = - Math.max(0, z - 2)
         for (let x=extent.min.x - bufferWidth ; x<= extent.max.x + bufferWidth; x+=3){
             for (let y=extent.min.y - bufferWidth; y<= extent.max.y + bufferWidth; y+=3){
                 tileCoords.add(this.zoomedOutCoordinates(

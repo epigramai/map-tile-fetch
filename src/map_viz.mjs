@@ -15,69 +15,69 @@ class TileMap {
 
         this.getTileUrl = getTileUrl;
         this.projection = null;
-        this.resetMap();
         this.zoomCallback = zoomCallback ? zoomCallback : ()=>{};
+        this.zoom = d3.zoom()
+            .scaleExtent([1 << 12, 1 << 25])
+            .extent([[0, 0], [this.width, this.height]])
 
     }
     initMap(){
-        d3.select(this.root).selectAll("#map")
+        const mapDiv = d3.select(this.root).selectAll("#map")
             .data([1])
-            .enter()
-            .append('div')
-            .attr('id', 'map')
-                .style('position', 'relative')
-                .style('margin', `${this.margin.top}px ${this.margin.right}px ${this.margin.bottom}px ${this.margin.left}px`)
-                .style("width", `${this.width}px`)
-                .style("height", `${this.height}px`);
+            .join(enter => enter
+                .append('div')
+                    .attr('id', 'map')
+                    .style('position', 'relative')
+                    .style('margin', `${this.margin.top}px ${this.margin.right}px ${this.margin.bottom}px ${this.margin.left}px`)
+                    .style("width", `${this.width}px`)
+                    .style("height", `${this.height}px`)
+            )
 
-
-        d3.select("#map")
+        mapDiv
             .append('canvas')
                 .attr('id', 'tile-canvas')
                 .attr('width', this.width)
                 .attr('height', this.height);
 
-        d3.select("#map")
+        mapDiv
             .append("svg")
                 .attr('id', 'map-svg')
                 .attr("width", this.width)
                 .attr("height", this.height)
 
-        this.map_el = document.getElementById('map');
-
+        this.map_el = mapDiv.node();
         this.projection = d3.geoMercator();
         this.tileFetcher = new TileFetcher(
             document.querySelector('#tile-canvas').getContext('2d'),
             this.width, this.height, this.getTileUrl)
 
+        return mapDiv;
     }
 
     resetMap(){
         if (this.map_el){
             this.map_el.innerHTML = "";
         }
-        this.initMap();
+        return this.initMap();
     }
 
     render(geoData){
-        this.resetMap();
-        const svg = d3.select("#map").select("svg");
+        if (d3.select("#map").empty()) this.initMap();
 
-        const zoom = d3.zoom()
-            .scaleExtent([1 << 12, 1 << 25])
-            .extent([[0, 0], [this.width, this.height]])
-            .on("zoom", (ev)=>{
-                this.tileFetcher.update(ev.transform)
-                this.updateProjection(ev.transform)
-                this.zoomCallback()
-            });
-        this.setInitialZoom(svg.call(zoom), zoom, geoData);
+        this.zoom
+        .on("zoom", (ev)=>{
+            this.tileFetcher.update(ev.transform);
+            this.updateProjection(ev.transform);
+            this.zoomCallback(ev.transform);
+        });
+        const svg = d3.select("#map").select("svg");
+        this.setInitialZoom(svg.call(this.zoom), geoData);
     }
 
-    setInitialZoom(svg, zoom, geoData){
+    setInitialZoom(svg, geoData){
         this.updateProjection({k: 1, x: 0, y:0});
         const pos = this.dataPos(geoData)
-        svg.call(zoom.transform, d3.zoomIdentity
+        svg.call(this.zoom.transform, d3.zoomIdentity
                 .translate(this.width / 2, this.height / 2)
                 .scale(pos.scale)
                 .translate(-pos.center[0], -pos.center[1]));

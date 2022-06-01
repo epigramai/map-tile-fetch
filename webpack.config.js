@@ -9,11 +9,10 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].mjs',
+        filename: '[name].js',
         library: {
             type: 'module',
         },
-        clean: true,
     },
     externals: {
         'd3': 'd3',

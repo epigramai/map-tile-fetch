@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "description": "Map tiles for d3 visualization",
   "private": false,
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "files": ["dist"],
+  "exports": {
+      "default": "./dist/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
