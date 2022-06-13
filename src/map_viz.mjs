@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-// import * as Geo from 'd3-geo';
 
 import { TileFetcher } from './tileFetcher.mjs';
 
@@ -70,6 +69,7 @@ class TileMap {
             this.updateProjection(ev.transform);
             this.zoomCallback(ev.transform);
         });
+        this.zoom.on("dblclick", null);
         const svg = d3.select("#map").select("svg");
         this.setInitialZoom(svg.call(this.zoom), geoData);
     }
