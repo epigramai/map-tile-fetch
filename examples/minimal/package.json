@@ -6,6 +6,11 @@
     "sideEffects": [
         "**/*.css"
     ],
+    "main": "./dist/index.js",
+    "files": ["/dist"],
+    "exports": {
+        "default": "./dist/index.js"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack"
@@ -23,6 +28,6 @@
         "webpack-dev-server": "^4.9.0"
     },
     "dependencies": {
-        "map-tile-fetch": "github:epigramai/map-tile-fetch"
+        "map-tile-fetch": "file:../../../map-tile-fetch"
     }
 }

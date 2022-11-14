@@ -1,10 +1,10 @@
 {
   "name": "map-tile-fetch",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Map tiles for d3 visualization",
   "private": false,
-  "main": "dist/index.js",
-  "files": ["dist"],
+  "main": "./dist/index.js",
+  "files": ["/dist"],
   "exports": {
       "default": "./dist/index.js"
   },
