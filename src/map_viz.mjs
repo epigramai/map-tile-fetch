@@ -4,7 +4,19 @@ import { TileFetcher } from './tileFetcher.mjs';
 
 const TAU = 2 * Math.PI;
 
-
+/**
+ * Get tiles from a tileserver and render it on a canvas.
+ * In addition a canvas is added for no particular purpose
+ * @param {HTMLElement} root - HTML element to insert map into (within div#map)
+ * @param {number} width - map width in pixels
+ * @param {number} height - map height in pixels
+ * @param {Object} [margin] - contains numbers for top, bottom, left, right in pixels
+ * @param {function} [getTileUrl] - tileUrl to be passed to TileFetcher
+ * @param {function} [zoomCallback] - calback on zoom event. Will return d3 zoom event object
+ *
+ * @property zoom - d3 zoom function
+ * @property projection - d3 projection (geoMercator) with zoom transforms applied to it
+ */
 class TileMap {
     constructor(root, width, height, margin, getTileUrl, zoomCallback){
         this.root = root;
@@ -43,6 +55,10 @@ class TileMap {
                 .attr('id', 'map-svg')
                 .attr("width", this.width)
                 .attr("height", this.height)
+                .append("g")
+                    .attr("id", "map-g")
+                    .attr("width", this.width)
+                    .attr("height", this.height)
 
         this.map_el = mapDiv.node();
         this.projection = d3.geoMercator();
@@ -67,17 +83,17 @@ class TileMap {
         .on("zoom", (ev)=>{
             this.tileFetcher.update(ev.transform);
             this.updateProjection(ev.transform);
-            this.zoomCallback(ev.transform);
+            this.zoomCallback(ev);
         });
-        this.zoom.on("dblclick", null);
-        const svg = d3.select("#map").select("svg");
+        const svg = d3.select("#map-svg");
         this.setInitialZoom(svg.call(this.zoom), geoData);
+        svg.on("dblclick.zoom", null);
     }
 
-    setInitialZoom(svg, geoData){
+    setInitialZoom(g, geoData){
         this.updateProjection({k: 1, x: 0, y:0});
         const pos = this.dataPos(geoData)
-        svg.call(this.zoom.transform, d3.zoomIdentity
+        g.call(this.zoom.transform, d3.zoomIdentity
                 .translate(this.width / 2, this.height / 2)
                 .scale(pos.scale)
                 .translate(-pos.center[0], -pos.center[1]));

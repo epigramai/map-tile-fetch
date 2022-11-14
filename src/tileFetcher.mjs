@@ -2,20 +2,29 @@ import * as Tile from 'd3-tile';
 // import * as d3 from 'd3';
 
 
+/**
+ * Get tiles from a tileserver.
+ * In addition a canvas is added for no particular purpose
+ * @param {CanvasRenderingContext2D} ctx - HTML Canvas context to draw on
+ * @param {number} width - canvas width in pixels
+ * @param {number} height - canvas height in pixels
+ * @param {function} [getUrl] - tileUrl function taking tile (x,y,z) as
+ *      input and returning url. Defaults to openstreetmaps tile server
+ */
 export class TileFetcher {
     tileSize = 256;
     nTileWidth = 2;
-    getUrl = (x, y, z) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`
+    getUrl = (x, y, z) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`;
 
     constructor(ctx, width, height, getUrl){
-        this.width = width
-        this.height = height
-        this.ctx = ctx
+        this.width = width;
+        this.height = height;
+        this.ctx = ctx;
         this.tileSet = Tile.tile()
             .size([width, height]);
         this.idx = 0;
         this.tilesRemaining = 0;
-        if (getUrl) this.getUrl = getUrl
+        if (getUrl) this.getUrl = getUrl;
     }
     scaledTiles(tfm){
         return this.tileSet
@@ -55,7 +64,7 @@ export class TileFetcher {
             // this.coordsRemoveMe = [x,y,z];
             const img = this.getImage(x,y,z);
             this.drawTile(img, x + tx, y + ty, scale);
-            if(!img.complete) {
+            if (!img.complete){
                 this.getPlaceholderTile(x, y, z, tx, ty, scale);
             }
         }
