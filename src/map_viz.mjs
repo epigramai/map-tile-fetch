@@ -7,7 +7,7 @@ const TAU = 2 * Math.PI;
 /**
  * Get tiles from a tileserver and render it on a canvas.
  * In addition a canvas is added for no particular purpose
- * @param {HTMLElement} root - HTML element to insert map into (within div#map)
+ * @param {HTMLElement} root - HTML element to insert map into (within div#map)
  * @param {number} width - map width in pixels
  * @param {number} height - map height in pixels
  * @param {Object} [margin] - contains numbers for top, bottom, left, right in pixels
@@ -55,10 +55,10 @@ class TileMap {
                 .attr('id', 'map-svg')
                 .attr("width", this.width)
                 .attr("height", this.height)
-                .append("g")
-                    .attr("id", "map-g")
-                    .attr("width", this.width)
-                    .attr("height", this.height)
+                // .append("g")
+                //     .attr("id", "map-g")
+                //     .attr("width", this.width)
+                //     .attr("height", this.height)
 
         this.map_el = mapDiv.node();
         this.projection = d3.geoMercator();
